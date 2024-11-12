@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: php:apache
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: cse311l_project
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root_password 
+    volumes:
+      # - db_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d 
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
