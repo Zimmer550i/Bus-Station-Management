@@ -1,7 +1,9 @@
 document.getElementById('stations').addEventListener('click', () => fetchData('stations'));
-document.getElementById('busses').addEventListener('click', () => fetchData('busses'));
+document.getElementById('buses').addEventListener('click', () => fetchData('buses'));
 document.getElementById('routes').addEventListener('click', () => fetchData('routes'));
 document.getElementById('employees').addEventListener('click', () => fetchData('employees'));
+
+const baseURL = 'http://localhost/';
 
 async function fetchData(type) {
   let apiUrl = '';
@@ -9,16 +11,16 @@ async function fetchData(type) {
   // Select the API URL based on the button type clicked
   switch (type) {
     case 'stations':
-      apiUrl = 'http://localhost/stations.php';
+      apiUrl = `${baseURL}stations.php`;
       break;
-    case 'busses':
-      apiUrl = 'http://localhost/busses.php';
+    case 'buses':
+      apiUrl = `${baseURL}buses.php`;
       break;
     case 'routes':
-      apiUrl = 'http://localhost/routes.php';
+      apiUrl = `${baseURL}routes.php`;
       break;
     case 'employees':
-      apiUrl = 'http://localhost/employees.php';
+      apiUrl = `${baseURL}employees.php`;
       break;
     default:
       console.error('Invalid type');
@@ -49,6 +51,7 @@ function createTable(data) {
     th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
     tableHeader.appendChild(th);
   });
+  tableHeader.appendChild(document.createElement('th')).textContent = "Modify";
 
   // Create table rows dynamically
   data.forEach(item => {
@@ -58,6 +61,27 @@ function createTable(data) {
       td.textContent = item[header];
       tr.appendChild(td);
     });
+    const td = document.createElement('td');
+
+    const editButton = document.createElement('button');
+    editButton.textContent = "Edit";
+    editButton.classList.add('edit-btn');
+    editButton.onclick = function () {
+      console.log('Edit button clicked');
+    };
+
+    // Create the Delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add('delete-btn'); 
+    deleteButton.onclick = function () {
+      console.log('Delete button clicked');
+    };
+
+    td.appendChild(editButton);
+    td.appendChild(deleteButton);
+    tr.appendChild(td);
+
     tableBody.appendChild(tr);
   });
 }

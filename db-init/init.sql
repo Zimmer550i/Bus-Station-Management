@@ -52,11 +52,6 @@ CREATE TABLE `bus_stations` (
 -- Dumping data for table `bus_stations`
 --
 
-INSERT INTO `bus_stations` (`station_id`, `station_name`, `location`) VALUES
-(3, 'Test2', 'TestLocation'),
-(6, 'Sample', 'Dhaka'),
-(7, 'Sample2', 'Dhaka');
-
 -- --------------------------------------------------------
 
 --
@@ -170,3 +165,35 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Data for `buses`
+INSERT INTO `buses` (`bus_id`, `bus_number`, `capacity`, `route_id`) VALUES
+(1, 'BUS-101', 40, 1),
+(2, 'BUS-102', 50, 2),
+(3, 'BUS-103', 45, 3),
+(4, 'BUS-104', 35, 4),
+(5, 'BUS-105', 55, 5);
+
+-- Data for `bus_stations`
+INSERT INTO `bus_stations` (`station_id`, `station_name`, `location`) VALUES
+(1, 'Gabtoli Bus Terminal', 'Gabtoli, Dhaka'),
+(2, 'Syedabad Bus Terminal', 'Syedabad, Dhaka'),
+(3, 'Jatrabari Bus Station', 'Jatrabari, Dhaka'),
+(4, 'Kallyanpur Bus Stand', 'Kallyanpur, Dhaka'),
+(5, 'Airport Bus Station', 'Airport Road, Dhaka');
+
+-- Data for `employees`
+INSERT INTO `employees` (`employee_id`, `employee_name`, `role`, `station_id`) VALUES
+(1, 'Shahriar Rahman', 'Driver', 1),
+(2, 'Tanvir Ahmed', 'Conductor', 2),
+(3, 'Nasima Begum', 'Ticket Collector', 3),
+(4, 'Farhana Yasmin', 'Driver', 4),
+(5, 'Jamal Uddin', 'Maintenance', 5);
+
+-- Data for `routes`
+INSERT INTO `routes` (`route_id`, `route_name`, `start_station_id`, `end_station_id`) VALUES
+(1, 'Dhaka-Chittagong Route', 1, 2),
+(2, 'Dhaka-Sylhet Route', 2, 3),
+(3, 'Dhaka-Rajshahi Route', 3, 4),
+(4, 'Dhaka-Khulna Route', 4, 5),
+(5, 'Dhaka-Barisal Route', 5, 1);
