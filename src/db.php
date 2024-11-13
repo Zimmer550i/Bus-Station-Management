@@ -2,7 +2,7 @@
 $servername = "db";
 $username = "admin";
 $password = "admin";
-$dbname = "cse311l_project"; // Replace with your database name
+$dbname = "bus_station"; // Replace with your database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

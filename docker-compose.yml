@@ -13,8 +13,8 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: your_password
-      MYSQL_DATABASE: cse311l_project
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: bus_station
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_HOST: '%'

@@ -1,7 +1,7 @@
-document.getElementById('stations').addEventListener('click', () => fetchData('stations'));
-document.getElementById('buses').addEventListener('click', () => fetchData('buses'));
-document.getElementById('routes').addEventListener('click', () => fetchData('routes'));
-document.getElementById('employees').addEventListener('click', () => fetchData('employees'));
+document.getElementById('stations').addEventListener('click', () => fetchData('station'));
+document.getElementById('buses').addEventListener('click', () => fetchData('bus'));
+document.getElementById('routes').addEventListener('click', () => fetchData('route'));
+document.getElementById('employees').addEventListener('click', () => fetchData('employee'));
 
 const baseURL = 'http://localhost/';
 
@@ -10,16 +10,16 @@ async function fetchData(type) {
 
   // Select the API URL based on the button type clicked
   switch (type) {
-    case 'stations':
+    case 'station':
       apiUrl = `${baseURL}stations.php`;
       break;
-    case 'buses':
+    case 'bus':
       apiUrl = `${baseURL}buses.php`;
       break;
-    case 'routes':
+    case 'route':
       apiUrl = `${baseURL}routes.php`;
       break;
-    case 'employees':
+    case 'employee':
       apiUrl = `${baseURL}employees.php`;
       break;
     default:
@@ -30,13 +30,13 @@ async function fetchData(type) {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    createTable(data);
+    createTable(data, type);
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 }
 
-function createTable(data) {
+function createTable(data, type) {
   const tableHeader = document.getElementById('tableHeader');
   const tableBody = document.getElementById('tableBody');
 
@@ -75,7 +75,7 @@ function createTable(data) {
     deleteButton.textContent = "Delete";
     deleteButton.classList.add('delete-btn'); 
     deleteButton.onclick = function () {
-      console.log('Delete button clicked');
+      deleteData(item, type);
     };
 
     td.appendChild(editButton);
@@ -84,4 +84,47 @@ function createTable(data) {
 
     tableBody.appendChild(tr);
   });
+}
+
+async function deleteData(item, type) {
+  let apiUrl = '';
+
+  // Select the API URL based on the button type clicked
+  switch (type) {
+    case 'station':
+      apiUrl = `${baseURL}stations.php`;
+      break;
+    case 'bus':
+      apiUrl = `${baseURL}buses.php`;
+      break;
+    case 'route':
+      apiUrl = `${baseURL}routes.php`;
+      break;
+    case 'employee':
+      apiUrl = `${baseURL}employees.php`;
+      break;
+    default:
+      console.error('Invalid type');
+      return;
+  }
+
+  // Append the ID of the item to delete in the query string
+  apiUrl = `${apiUrl}?id=${item[`${type}_id`]}`;
+
+  try {
+    // Make the DELETE request
+    const response = await fetch(apiUrl, {
+      method: 'DELETE',
+    });
+
+    // Check if deletion was successful
+    if (response.ok) {
+      console.log(`Successfully deleted ${type} with ID: ${item[`${type}_id`]}`);
+      fetchData(type);
+    } else {
+      console.error(`Failed to delete ${type}:`, await response.text());
+    }
+  } catch (error) {
+    console.error('Error deleting data:', error);
+  }
 }
