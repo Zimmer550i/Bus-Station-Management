@@ -7,7 +7,7 @@
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
-ALTER USER ‘user’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘password’;
+ALTER USER 'admin'@'%' IDENTIFIED BY 'admin';
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -166,14 +166,6 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
--- Data for `buses`
-INSERT INTO `buses` (`bus_id`, `bus_number`, `capacity`, `route_id`) VALUES
-(1, 'BUS-101', 40, 1),
-(2, 'BUS-102', 50, 2),
-(3, 'BUS-103', 45, 3),
-(4, 'BUS-104', 35, 4),
-(5, 'BUS-105', 55, 5);
-
 -- Data for `bus_stations`
 INSERT INTO `bus_stations` (`station_id`, `station_name`, `location`) VALUES
 (1, 'Gabtoli Bus Terminal', 'Gabtoli, Dhaka'),
@@ -197,3 +189,11 @@ INSERT INTO `routes` (`route_id`, `route_name`, `start_station_id`, `end_station
 (3, 'Dhaka-Rajshahi Route', 3, 4),
 (4, 'Dhaka-Khulna Route', 4, 5),
 (5, 'Dhaka-Barisal Route', 5, 1);
+
+-- Data for `buses`
+INSERT INTO `buses` (`bus_id`, `bus_number`, `capacity`, `route_id`) VALUES
+(1, 'BUS-101', 40, 1),
+(2, 'BUS-102', 50, 2),
+(3, 'BUS-103', 45, 3),
+(4, 'BUS-104', 35, 4),
+(5, 'BUS-105', 55, 5);
