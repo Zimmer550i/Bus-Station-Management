@@ -44,6 +44,15 @@ button:hover {
   background-color: #45a049;
 }
 
+
+.delete-btn{
+  background-color: #ce3535;
+}
+
+.delete-btn:hover{
+  background-color: rgb(255, 0, 0);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

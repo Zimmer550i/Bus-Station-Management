@@ -6,28 +6,8 @@ document.getElementById('employees').addEventListener('click', () => fetchData('
 const baseURL = 'http://localhost/';
 
 async function fetchData(type) {
-  let apiUrl = '';
-
-  switch (type) {
-    case 'station':
-      apiUrl = `${baseURL}stations.php`;
-      break;
-    case 'bus':
-      apiUrl = `${baseURL}buses.php`;
-      break;
-    case 'route':
-      apiUrl = `${baseURL}routes.php`;
-      break;
-    case 'employee':
-      apiUrl = `${baseURL}employees.php`;
-      break;
-    default:
-      console.error('Invalid type');
-      return;
-  }
-
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(getApiUrl(type));
     const data = await response.json();
     createTable(data, type);
   } catch (error) {
@@ -80,6 +60,26 @@ function createTable(data, type) {
 
     tableBody.appendChild(tr);
   });
+
+  const container = document.getElementById("mainContainer");
+  let buttonContainer = document.getElementById("buttonContainer");
+
+  if (!buttonContainer) {
+    buttonContainer = document.createElement("div");
+    buttonContainer.id = "buttonContainer";
+    container.appendChild(buttonContainer);
+  }
+
+  buttonContainer.textContent = '';
+
+  const addButton = document.createElement("button");
+  addButton.textContent = `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+  addButton.classList.add("add-btn");
+  addButton.onclick = () => {
+    addData(type, headers, tableBody);
+  };
+
+  buttonContainer.appendChild(addButton);
 }
 
 async function deleteData(item, type) {
@@ -191,4 +191,85 @@ async function editData(headers, tr, type, editButton) {
       console.error('Error editing data:', error);
     }
   }
+}
+
+async function addData(type, headers, tableBody) {
+  let tr = document.createElement('tr');
+
+  let newData = {};
+
+  headers.forEach((e, i) => {
+    let td = document.createElement('td');
+    let input = document.createElement('input');
+    input.type = 'text';
+    if (i == 0) {
+      td.textContent = "Will be auto-generated";
+    } else {
+      td.textContent = '';
+      td.appendChild(input);
+    }
+
+    tr.appendChild(td);
+  });
+
+  let saveButton = document.createElement('button');
+  saveButton.textContent = "Save";
+  saveButton.onclick = async () => {
+    Array.from(tr.children).forEach((e, i) => {
+      if(i>0 && i<=headers.length){
+        let temp = e.querySelector('input');
+        if(temp){
+          newData[headers[i]] = temp.value;
+        }
+      }
+    });
+
+    const jsonData = JSON.stringify(newData);
+
+    try {
+      const response = await fetch(getApiUrl(type), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: jsonData,
+      });
+
+      if (response.ok) {
+        console.log(`Successfully added ${type}`);
+        fetchData(type);
+      } else {
+        console.error(`Failed to add ${type}:`, await response.text());
+      }
+    } catch (error) {
+      console.error('Error adding data:', error);
+    }
+  };
+  tr.appendChild(saveButton);
+
+  tableBody.appendChild(tr);
+}
+
+function getApiUrl(type) {
+  let apiUrl = '';
+
+  switch (type) {
+    case 'station':
+      apiUrl = `${baseURL}stations.php`;
+      break;
+    case 'bus':
+      apiUrl = `${baseURL}buses.php`;
+      break;
+    case 'route':
+      apiUrl = `${baseURL}routes.php`;
+      break;
+    case 'employee':
+      apiUrl = `${baseURL}employees.php`;
+      break;
+    default:
+      console.error('Invalid type');
+      return;
+  }
+
+  return apiUrl;
 }
