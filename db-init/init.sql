@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `buses` (
   `bus_id` int(11) NOT NULL,
-  `bus_number` varchar(10) NOT NULL,
+  `bus_number` varchar(100) NOT NULL,
   `capacity` int(11) NOT NULL,
   `route_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

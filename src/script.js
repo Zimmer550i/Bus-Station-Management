@@ -5,6 +5,30 @@ document.getElementById('employees').addEventListener('click', () => fetchData('
 
 const baseURL = 'http://localhost/';
 
+function getApiUrl(type) {
+  let apiUrl = '';
+
+  switch (type) {
+    case 'station':
+      apiUrl = `${baseURL}stations.php`;
+      break;
+    case 'bus':
+      apiUrl = `${baseURL}buses.php`;
+      break;
+    case 'route':
+      apiUrl = `${baseURL}routes.php`;
+      break;
+    case 'employee':
+      apiUrl = `${baseURL}employees.php`;
+      break;
+    default:
+      console.error('Invalid type');
+      return;
+  }
+
+  return apiUrl;
+}
+
 async function fetchData(type) {
   try {
     const response = await fetch(getApiUrl(type));
@@ -22,6 +46,7 @@ function createTable(data, type) {
   tableHeader.innerHTML = '';
   tableBody.innerHTML = '';
 
+  // Create Table Header
   const headers = Object.keys(data[0]);
   headers.forEach(header => {
     const th = document.createElement('th');
@@ -30,6 +55,7 @@ function createTable(data, type) {
   });
   tableHeader.appendChild(document.createElement('th')).textContent = "Modify";
 
+  // Create Table Body
   data.forEach(item => {
     const tr = document.createElement('tr');
     headers.forEach(header => {
@@ -61,6 +87,7 @@ function createTable(data, type) {
     tableBody.appendChild(tr);
   });
 
+  // Add Button
   const container = document.getElementById("mainContainer");
   let buttonContainer = document.getElementById("buttonContainer");
 
@@ -83,27 +110,7 @@ function createTable(data, type) {
 }
 
 async function deleteData(item, type) {
-  let apiUrl = '';
-
-  switch (type) {
-    case 'station':
-      apiUrl = `${baseURL}stations.php`;
-      break;
-    case 'bus':
-      apiUrl = `${baseURL}buses.php`;
-      break;
-    case 'route':
-      apiUrl = `${baseURL}routes.php`;
-      break;
-    case 'employee':
-      apiUrl = `${baseURL}employees.php`;
-      break;
-    default:
-      console.error('Invalid type');
-      return;
-  }
-
-  apiUrl = `${apiUrl}?id=${item[`${type}_id`]}`;
+  apiUrl = `${getApiUrl(type)}?id=${item[`${type}_id`]}`;
 
   try {
     const response = await fetch(apiUrl, {
@@ -122,26 +129,6 @@ async function deleteData(item, type) {
 }
 
 async function editData(headers, tr, type, editButton) {
-  let apiUrl = '';
-
-  switch (type) {
-    case 'station':
-      apiUrl = `${baseURL}stations.php`;
-      break;
-    case 'bus':
-      apiUrl = `${baseURL}buses.php`;
-      break;
-    case 'route':
-      apiUrl = `${baseURL}routes.php`;
-      break;
-    case 'employee':
-      apiUrl = `${baseURL}employees.php`;
-      break;
-    default:
-      console.error('Invalid type');
-      return;
-  }
-
   if (editButton.textContent === "Edit") {
     Array.from(tr.children).forEach((td, i) => {
       if (i > 0 && i < headers.length) {
@@ -173,7 +160,7 @@ async function editData(headers, tr, type, editButton) {
     const jsonData = JSON.stringify(newData);
 
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(getApiUrl(type), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -203,7 +190,7 @@ async function addData(type, headers, tableBody) {
     let input = document.createElement('input');
     input.type = 'text';
     if (i == 0) {
-      td.textContent = "Will be auto-generated";
+      td.textContent = "Auto Assigned";
     } else {
       td.textContent = '';
       td.appendChild(input);
@@ -216,9 +203,9 @@ async function addData(type, headers, tableBody) {
   saveButton.textContent = "Save";
   saveButton.onclick = async () => {
     Array.from(tr.children).forEach((e, i) => {
-      if(i>0 && i<=headers.length){
+      if (i > 0 && i <= headers.length) {
         let temp = e.querySelector('input');
-        if(temp){
+        if (temp) {
           newData[headers[i]] = temp.value;
         }
       }
@@ -248,28 +235,4 @@ async function addData(type, headers, tableBody) {
   tr.appendChild(saveButton);
 
   tableBody.appendChild(tr);
-}
-
-function getApiUrl(type) {
-  let apiUrl = '';
-
-  switch (type) {
-    case 'station':
-      apiUrl = `${baseURL}stations.php`;
-      break;
-    case 'bus':
-      apiUrl = `${baseURL}buses.php`;
-      break;
-    case 'route':
-      apiUrl = `${baseURL}routes.php`;
-      break;
-    case 'employee':
-      apiUrl = `${baseURL}employees.php`;
-      break;
-    default:
-      console.error('Invalid type');
-      return;
-  }
-
-  return apiUrl;
 }
